@@ -1,0 +1,3 @@
+<select [(ngModel)]="selectedUtility.utilityId"  (change)="onSelectUtility($event.target.value)" style="width:100px">
+<option *ngFor="let utility of utilities" value = "{{utility.utilityId}}" >{{utility.utilityName}}</option>
+</select>

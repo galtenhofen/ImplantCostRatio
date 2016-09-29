@@ -1,0 +1,101 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        <div class='row'>
+            <div class='col-xs-2' align='right'>Parent Case:</div>
+            <div class='col-xs-1' align='left'>1010101</div>
+            <div class='col-xs-1' align='right'>Sub Case:</div>
+            <div class='col-xs-1' align='left'>789987</div>
+            <div class='col-xs-1' align='right'>User:</div>
+            <div class='col-xs-1' align='left'>galtenhofen</div>
+        </div>
+
+    </div>  <!-- panel-heading closure -->
+
+<div class='panel panel-info'>
+        <div class='panel-heading'>
+            <div class='row'>
+                    <div class='col-xs-1'>
+                            <button class='btn btn-success' (click)='onClickrefreshBatchList()'>
+                                Refresh
+                            </button>
+                    </div>
+               <div class="radio-toolbar">
+
+                    <input type="radio" id="radio1" name="radios" value="N" checked>
+                    <label for="radio1">Don't Override Cost Updates</label>
+
+                    <input type="radio" id="radio2" name="radios" value="O">
+                    <label for="radio2">Override Cost Updates</label>
+
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class='panel-body'>
+
+
+
+
+<div >
+<modal-confirm></modal-confirm>
+<body onload='makeTableScroll();'>
+<div class='scrollingTable' > 
+         <!--   <table class='table table-striped table-bordered' *ngIf = 'orfiles && orfiles.length'> 
+             This line decides whether or not headers are visible if there is no data returned
+             -->
+             <table id='batchFilesTable' resizeable mode="resizeMode" class='table table-striped table-bordered table-condensed' >
+                <thead>
+                    <tr>
+                        <th>BatchID</th>
+                        <th>Description</th>
+                        <th>Volume</th>
+                        <th>Avg Implant Charge</th>
+                        <th>Avg Implant Var Cost</th>
+                        <th>Target Avg Implant Var Cost</th>
+                        <th>No Update</th>
+      
+                    </tr>
+                </thead>           
+                <tbody >
+                <tr *ngFor='let batchfile of batchfiles; let i = index;'>
+                    <td style="text-align:center">{{batchfile.jsxid}}</td>
+                    <td style="text-align:center"><a href={{batchfile.mstrUrl}} target="_blank"> {{batchfile.description}} </a></td> 
+                    <td style="text-align:center">{{batchfile.volume}}</td>
+                    <td style="text-align:center">{{batchfile.avgImpCharge}}</td>
+                    <td style="text-align:center">{{batchfile.avgImpVarCost}}</td>
+                    <td style="text-align:center" *ngIf="updateCheckbox.checked!=true" ><input #updateVarCost type="number" min="1" id="updateVarCost" [attr.id]="'updateVarCost' + batchfile.jsxid" [(ngModel)]='updateVarCost[i]' (change)="onUpdateVarCost(batchfile.jsxid,updateVarCost[i])" aria-label="..."></td>
+                     <td *ngIf="updateCheckbox.checked==true"><div></div></td>  
+                    <td style="text-align:center"><input #updateCheckbox type="checkbox" id="updateCheckbox" value="option1" (change)="onToggleUpdate(batchfile.jsxid,updateCheckbox.checked)" aria-label="..."></td>
+                </tr> 
+                
+                </tbody>
+               </table>
+
+               <div class= 'panel-heading' *ngIf= 'loading && (!batchfiles || batchfiles.length < 1)'>
+                      Retrieving Batches...
+                   </div>   
+               <div class= 'panel-heading' *ngIf='errorMessage'>
+                      There was a problem retrieving Batches.  Error Code: {{errorMessage}}
+                   </div>  
+                <div class= 'panel-heading' *ngIf='(!batchfiles || batchfiles.length < 1) && !errorMessage && !loading'>
+                      There is no data for this facility
+                   </div>  
+           </div> <!-- this is the table-responsive wrapper-->  
+        </body>
+</div> 
+<div class='row'>
+            <div class='col-xs-3' align="left" >
+                <button id='getSpendDataBtn' class='btn btn-primary' onclick="window.open('http://medassets.sharepoint.com/sites/spendmanagement/AS/TEPS/TO/Clinical/TIBCO/Processing/SQL/spRP_SCFPO_OrthoSpendData.sql')"> Get Ortho Spend Construct Data</button>
+                </div>
+                <div class='col-xs-6'></div>
+            
+             <div class='col-xs-3' align="right">
+                <button id='cancelBtn' class='btn btn-primary' (click)='onClickClose()' > Cancel </button> 
+                <button id='saveBtn' class='btn btn-primary' (click)='onClickClose()' > Save </button> 
+                <button id='submitBtn' class='btn btn-danger' (click)='onClickSubmit()' > Submit </button> 
+                </div>
+     </div>           
+        </div>
+  
+</div>
+

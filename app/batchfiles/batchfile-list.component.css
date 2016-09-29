@@ -1,0 +1,52 @@
+thead{
+    color: #337AB7;
+      width: 100%;
+      vertical-align: middle;
+}
+
+table{
+    table-layout: fixed;
+    width:  100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+th{
+    text-align: center;
+    vertical-align: center;
+    vertical-align: middle;
+    height: 40px;
+    line-height: 40px;
+}
+
+td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+input { 
+    text-align: center; 
+}
+
+.radio-toolbar input[type="radio"] {
+    display:none;
+}
+
+.radio-toolbar label {
+    display:inline-block;
+    background-color:#bbb;
+    padding:4px 11px;
+    font-family:Arial;
+    font-size:16px;
+}
+
+.radio-toolbar input[type="radio"]:checked + label {
+    background-color:#ddd;
+    outline: 3px solid #337AB7
+}
+
+.scrollingTable {
+            display: inline-block;
+            overflow-y: scroll;
+            max-height:600px;
+        }

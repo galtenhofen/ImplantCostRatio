@@ -1,0 +1,146 @@
+[
+      {
+        "jsxid": "4028",
+        "avgImpCharge": "10365",
+        "avgImpVarCost": "4",
+        "description": "MSDRG 466 Revision Hip/Knee w MCC",
+        "volume": "1",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4028"
+      },
+      {
+        "jsxid": "4029",
+        "avgImpCharge": "15389",
+        "avgImpVarCost": "3",
+        "description": "MSDRG 467 Revision Hip/Knee w CC",
+        "volume": "4",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4029"
+      },
+      {
+        "jsxid": "4030",
+        "avgImpCharge": "23184",
+        "avgImpVarCost": "1",
+        "description": "MSDRG 468 Revision Hip/Knee wo CC/MCC",
+        "volume": "10",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4030"
+      },
+      {
+        "jsxid": "4031",
+        "avgImpCharge": "18672",
+        "avgImpVarCost": "100",
+        "description": "MSDRG 469 Total Joint w MCC",
+        "volume": "10",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4031"
+      },
+      {
+        "jsxid": "4415",
+        "avgImpCharge": "11311",
+        "avgImpVarCost": "10",
+        "description": "MSDRG 470 Partial Hip",
+        "volume": "7",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4415"
+      },
+      {
+        "jsxid": "4414",
+        "avgImpCharge": "22358",
+        "avgImpVarCost": "1",
+        "description": "MSDRG 470 Total Hip",
+        "volume": "39",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4414"
+      },
+      {
+        "jsxid": "4416",
+        "avgImpCharge": "22039",
+        "avgImpVarCost": "9293",
+        "description": "MSDRG 470 Total Knee",
+        "volume": "26",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4416"
+      },
+      {
+        "jsxid": "4431",
+        "avgImpCharge": "15939",
+        "avgImpVarCost": "6713",
+        "description": "MSDRG 483 Total Shoulder w CC/MCC",
+        "volume": "12",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4431"
+      },
+      {
+        "jsxid": "4432",
+        "avgImpCharge": "15007",
+        "avgImpVarCost": "9",
+        "description": "MSDRG 484 Total Shoulder wo CC/MCC",
+        "volume": "57",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4432"
+      },
+      {
+        "jsxid": "4015",
+        "avgImpCharge": "37790",
+        "avgImpVarCost": "17006",
+        "description": "MSDRG 453 Combined Fusion w MCC",
+        "volume": "2",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4015"
+      },
+      {
+        "jsxid": "4016",
+        "avgImpCharge": "36219",
+        "avgImpVarCost": "16298",
+        "description": "MSDRG 454 Combined Fusion w CC",
+        "volume": "8",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4016"
+      },
+      {
+        "jsxid": "4017",
+        "avgImpCharge": "22302",
+        "avgImpVarCost": "10036",
+        "description": "MSDRG 455 Combined Fusion wo MCC/CC",
+        "volume": "1",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4017"
+      },
+      {
+        "jsxid": "4019",
+        "avgImpCharge": "31075",
+        "avgImpVarCost": "13984",
+        "description": "MSDRG 457 Lumbar Fusion w Spinal Curv w CC",
+        "volume": "3",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4019"
+      },
+      {
+        "jsxid": "4021",
+        "avgImpCharge": "25249",
+        "avgImpVarCost": "11362",
+        "description": "MSDRG 459 Lumbar Fusion w MCC",
+        "volume": "13",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4021"
+      },
+      {
+        "jsxid": "4022",
+        "avgImpCharge": "25315",
+        "avgImpVarCost": "11366",
+        "description": "MSDRG 460 Lumbar Fusion wo MCC",
+        "volume": "56",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4022"
+      },
+      {
+        "jsxid": "4033",
+        "avgImpCharge": "14392",
+        "avgImpVarCost": "6477",
+        "description": "MSDRG 471 Cervical Fusion w MCC",
+        "volume": "3",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4033"
+      },
+      {
+        "jsxid": "4034",
+        "avgImpCharge": "16901",
+        "avgImpVarCost": "7605",
+        "description": "MSDRG 472 Cervical Fusion w CC",
+        "volume": "18",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4034"
+      },
+      {
+        "jsxid": "4035",
+        "avgImpCharge": "14612",
+        "avgImpVarCost": "6575",
+        "description": "MSDRG 473 Cervical Fusion wo CC/MCC",
+        "volume": "30",
+        "mstrUrl": "http://devanalytics.medassets.com:8080/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:1233,D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:4035"
+      }
+    ]

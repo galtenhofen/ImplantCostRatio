@@ -1,0 +1,144 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        <div class='row'>
+            <div class='col-xs-1'></div>
+            <div class='col-xs-2' align='right'>Date File Received From:</div>
+            <div class='col-xs-2'>
+                <input style='width:70%' type="date" [(ngModel)]="beginDate" class="form-control" (change)="onChangeDateReceivedFrom($event.target.value)">
+            </div>
+            <div class='col-xs-2' align='right'>Date File Received To:</div>
+            <div class='col-xs-2'>
+                 <input  style='width:70%' type="date" [(ngModel)]="endDate" class="form-control" (change)="onChangeDateReceivedTo($event.target.value)">
+            </div>
+            <div class='col-xs-2'>
+                <button class='btn btn-success' (click)='onClickrefreshORList()'>
+                                Refresh
+                            </button>
+                </div>
+       </div>
+    </div>
+   <!-- Filter the Products   -->
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-xs-2 panel-heading'>Filter by:</div>
+         </div>   
+         <div class = 'row'>
+            <div class='col-xs-3'>
+                <input type='text' [(ngModel)]='providerFilter' placeholder="ProviderID"/>
+            </div>
+            <div class='col-xs-3'>
+                <input type='text' [(ngModel)]='fileTypeFilter' placeholder="File Type"/>
+            </div>
+            <div class='col-xs-3'>
+                <input type='text' [(ngModel)]='subsystemFilter' placeholder="Subsystem Detail Type"/>
+            </div>
+            <div class='col-xs-3'>
+                <select name ="status" form = "statusForm" [(ngModel)]='statusFilter' placeholder="Status" default = "Status">
+                    <option value="" disabled selected>Status</option>
+                    <option value="">All</option>
+                    <option value="Failed">Failed</option>
+                    <option value="Open Cases">Open Cases</option>
+                    <option value="Case Complete">Case Complete</option>
+                    <option value="Purged">Purged</option>
+                </select>
+                <!-- <input type='select' [(ngModel)]='statusFilter' placeholder="Status"/> -->
+            </div>
+        </div>
+        <div style="height:30px" *ngIf='!providerFilter && !fileTypeFilter && !subsystemFilter && !statusFilter'>
+            </div>
+   <div class='row' >
+            <div class='col-md-3' *ngIf='providerFilter'>
+                <h3>Filtered by ProviderId: {{providerFilter}} </h3>
+            </div>
+			<div class='col-md-3' *ngIf='fileTypeFilter'>
+                <h3>Filtered by FileType: {{fileTypeFilter}} </h3>
+            </div>
+			     <div class='col-md-3' *ngIf='subsystemFilter'>
+                <h3>Filtered by Subsystem Type: {{subsystemFilter}} </h3>
+            </div>
+			 <div class='col-md-3' *ngIf='statusFilter'>
+                <h3>Filtered by Status: {{statusFilter}} </h3>
+            </div>
+</div>
+
+<div>
+
+<modal-confirm></modal-confirm>
+<body onload='makeTableScroll();'>
+<div class='scrollingTable' > 
+         <!--   <table class='table table-striped table-bordered' *ngIf = 'orfiles && orfiles.length'> 
+             This line decides whether or not headers are visible if there is no data returned
+             -->
+             <table id='orFilesTable' resizeable mode="resizeMode" class='table table-striped table-bordered table-condensed' >
+                <thead>
+                    <tr>
+                        <th>PDU Job<br>Number</th>
+                        <th>Date File<br>Received</th>
+                        <th>Data File<br> Name</th>
+                        <th>ORDataFile<br>GroupId</th>
+                        <th style='vertical-align: middle'>ProviderID</th>
+                        <th>Client<br>Name</th>
+                        <th>Begin Date<br>Range</th>
+                        <th>End Date<br>Range</th>
+                        <th>Publish<br>Date</th>
+                        <th style='vertical-align: middle'>File Type</th>
+                        <th>Row Count<br>Expected</th>
+                        <th>Row Count<br>Converted</th>
+                        <th style='vertical-align: middle'>Step</th>
+                        <th style='vertical-align: middle'>Status</th>
+                        <th>Error<br>Message</th>
+                        <th style='vertical-align: middle'>Retry</th>
+                        <th>Retry<br>Count</th>
+                        <th>Data<br>Utility</th>
+                    </tr>
+                </thead>           
+                <tbody >
+                <tr *ngFor='let orfile of orfiles | orfileFilter:providerFilter:fileTypeFilter:subsystemFilter:statusFilter'>
+                    <td style="text-align:center">{{orfile.pduJobNumber}}</td>
+                    <td style="text-align:center">{{orfile.dateFileReceived}}</td>
+                    <td title={{orfile.rawFilename}}>{{orfile.rawFilename}}</td>
+                    <td style="text-align:center"> <a [routerLink]="['FileDetail', {id: orfile.orDataFileGroupID}]" >{{orfile.orDataFileGroupID}} </a></td>
+                    <td style="text-align:center">{{orfile.providerID}}</td>
+                    <td title={{orfile.clientName}}>{{orfile.clientName}}</td>
+                    <td style="text-align:center">{{orfile.beginDateRange}}</td>
+                    <td style="text-align:center">{{orfile.endDateRange}}</td>
+                    <td style="text-align:center">{{orfile.publishCompleteDate}}</td>
+                    <td title={{orfile.fileType}}-{{orfile.fileType_SubsystemDetailType}}>{{orfile.fileType}} - {{orfile.fileType_SubsystemDetailType}}</td>
+                    <td style="text-align:center">{{orfile.rowCountExpected}}</td>
+                    <td style="text-align:center">{{orfile.rowCountConverted}}</td>
+                    <td style="text-align:center">{{orfile.processStep}}</td>
+                    <td style="text-align:center">{{orfile.processStatus}}</td>
+                    <td title={{orfile.errorMessage}}>{{orfile.errorMessage}}</td>
+                    <td  style="text-align:center" *ngIf="orfile.processStatus=='Failed'"><input #retryCheckbox type="checkbox" id="retryCheckbox" value="option1" (change)="onToggleRetry(orfile.orDataFileGroupID,retryCheckbox.checked,orfile.processStep, orfile.providerID)" aria-label="..."></td>
+                    <td *ngIf="orfile.processStatus!='Failed'"><div></div></td>   
+                    <td style="text-align:center">{{orfile.retryCount}}</td>
+                    <td *ngIf="!orfile.publishCompleteDate"><orw-utility-list (utilitySelected)='onUtilitySelected($event, orfile.orDataFileGroupID, orfile.providerID)'></orw-utility-list></td>
+                 </tr> 
+                
+                </tbody>
+               </table>
+
+               <div class= 'panel-heading' *ngIf= 'loading && (!orfiles || orfiles.length < 1)'>
+                      Retrieving ORFiles...
+                   </div>   
+               <div class= 'panel-heading' *ngIf='errorMessage'>
+                      There was a problem retrieving ORFiles.  Error Code: {{errorMessage}}
+                   </div>  
+                <div class= 'panel-heading' *ngIf='(!orfiles || orfiles.length < 1) && !errorMessage && !loading'>
+                      There is no data for the chosen dates
+                   </div>  
+           </div> <!-- this is the table-responsive wrapper-->  
+        </body>
+</div> 
+
+     
+                <div align="right">
+                <button id='retryBtn' class='btn btn-primary' (click)='showConfirmDialog("ReleaseRetry")'> Release Checked Retry Items</button>
+                <button id='utilityBtn' class='btn btn-primary' (click)='showConfirmDialog("DataUtilities")' > Run Selected Data Utilities </button>
+              <button id='closeBtn' class='btn btn-danger' (click)='onClickClose()' > Close </button> 
+                </div>
+                
+        </div>
+  
+</div>
+
