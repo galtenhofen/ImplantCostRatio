@@ -34,15 +34,26 @@ input {
 
 .radio-toolbar label {
     display:inline-block;
-    background-color:#bbb;
+    background-color:#337AB7;
     padding:4px 11px;
     font-family:Arial;
     font-size:16px;
 }
 
+#getBtn{
+ border: 2px solid white;
+ border-radius: 10px;
+}
+
+#dfgLbl{
+    font-size: 110%;
+    text-align:right;
+}
+
 .radio-toolbar input[type="radio"]:checked + label {
-    background-color:#ddd;
-    outline: 3px solid #337AB7
+    border-radius: 10px;
+    background-color:deepskyblue;
+    border: 2px solid white
 }
 
 .scrollingTable {

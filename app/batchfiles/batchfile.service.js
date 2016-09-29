@@ -28,16 +28,16 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
                 function BatchFileService(_http) {
                     this._http = _http;
                     //private _orfileUrl = 'http://crp12vdtib03:8080/ORWorkflow/service';
-                    this._batchfileUrl = 'api/batchfiles/batchfiles.json';
+                    this._batchfileUrl = 'api/batchfiles/batchfiles1.json';
                     this.loading = false;
                 }
-                BatchFileService.prototype._getBatchFilesOrig = function () {
+                BatchFileService.prototype.getBatchFiles = function () {
                     return this._http.get(this._batchfileUrl)
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All: " + JSON.stringify(data)); })
                         .catch(this.throwStatus);
                 };
-                BatchFileService.prototype.getBatchFiles = function () {
+                BatchFileService.prototype._getBatchFiles_TOPLEVEL = function () {
                     var _this = this;
                     return this._http.get(this._batchfileUrl)
                         .finally(function () { return _this.loading = false; })
@@ -61,7 +61,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
                     var body = JSON.stringify(updates);
                     var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
                     var options = new http_1.RequestOptions({ headers: headers });
-                    return this._http.post(this._batchfileUrl + "/newVarCostlist", body, options)
+                    return this._http.post(this._batchfileUrl + "/dataFileGroupId", body, options)
                         .do(function (data) { return console.log("POST Response: " + JSON.stringify(data)); })
                         .map(this.checkResponseStatus)
                         .catch(this.throwStatus);

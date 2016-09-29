@@ -48,24 +48,44 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     this.confirmResponse = '';
                     this.loading = false;
                     this.override = false;
+                    this.attempt = false;
                     this.loading = this._batchfileService.loading;
                 }
                 BatchFileListComponent.prototype.ngOnInit = function () {
-                    var _this = this;
                     console.log('IN  OnInit');
                     componentHandler.upgradeDom();
                     console.log('Retrieving Batch Files...');
-                    this.loading = true;
-                    /*  ORIGINAL - for use without top level DATA in json response
+                    this.loading = false;
+                    this.attempt = false;
+                    /*  NO LONGER FETCHING DATA ON LOAD - WAITING FOR USER TO ENTER DFGID
                     
                          this._batchfileService.getBatchFiles()
                                     .subscribe(
                                         batchfiles => this.batchfiles = batchfiles,
                                         error => this.errorMessage = <any>error,
                                         () => this.onRequestComplete());
+                    
                     */
+                    /*  FOR USE WITH TOP LEVEL, BUT IGNORES TOP LEVEL
+                     this._batchfileService.getBatchFiles()
+                                    .subscribe(
+                                        response => this.batchfiles = response.record,
+                                        error => this.errorMessage = <any>error,
+                                        () => this.onRequestComplete());
+                    */
+                    /*  THIS DEALS WITH ALL DATA FROM TOP LEVEL
                     this._batchfileService.getBatchFiles()
-                        .subscribe(function (response) { return _this.batchfiles = response.record; }, function (error) { return _this.errorMessage = error; }, function () { return _this.onRequestComplete(); });
+                                    .subscribe(
+                                        response => this.batchfileResponse = response,
+                                        error => this.errorMessage = <any>error,
+                                        () => this.onRequestComplete());
+                    
+                        
+                    */
+                };
+                BatchFileListComponent.prototype.onUpdateDataFileGroupId = function (updateDFG) {
+                    console.log('Entering onUpdateDataFileGroupId this.loading: ' + updateDFG);
+                    this.dataFileGroupId = updateDFG;
                 };
                 /*
                  showConfirmDialog(stringTitle) {
@@ -105,20 +125,18 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                 */
                 BatchFileListComponent.prototype.onClickrefreshBatchList = function () {
                     var _this = this;
+                    this.attempt = false;
                     this.disableButtons();
-                    //var run:boolean = this.validateReceivedDates(this.beginDate, this.endDate);
-                    //if (run == true){
-                    this.batchfiles = [];
-                    this.loading = true;
-                    this._batchfileService.getBatchFiles()
-                        .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, function (error) { return _this.errorMessage = error; }, 
-                    //() => (this.loading = this._orfileService.loading));
-                    function () { return (_this.onRequestComplete()); });
-                    // }
-                    // else{
-                    //    alert('You entered a begin date ('+this.beginDate+') that is after the end date ('+this.endDate+ ') and that makes no sense.');
-                    //    console.log('You fucked up the dates');
-                    // }
+                    if (this.dataFileGroupId && this.dataFileGroupId != null && this.dataFileGroupId != "") {
+                        this.batchfiles = [];
+                        this.loading = true;
+                        this._batchfileService.getBatchFiles()
+                            .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, function (error) { return _this.errorMessage = error; }, function () { return _this.onRequestComplete(); });
+                    }
+                    else {
+                        alert('Please Enter a DataFileGroupId to in order to fetch files');
+                        console.log('You fucked up the dates');
+                    }
                     console.log('Leaving onClickrefreshBatchList this.loading: ' + this.loading);
                 };
                 BatchFileListComponent.prototype.onToggleUpdate = function (jsxid, updated) {
@@ -198,9 +216,19 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     console.log('this.updateObjects: ' + this.updateObjects);
                     console.log('filtered updateObjects: ' + this.updateObjects.filter(function (update) { return update.newVarCost != null; }));
                     this.newVarCostUpdates = this.updateObjects.filter(function (update) { return update.newVarCost != null; });
+                    this.buildOutboundJSON();
                     console.log('stringify updateObjects: ' + JSON.stringify(this.newVarCostUpdates));
                     this._batchfileService.postUpdates(this.newVarCostUpdates)
                         .subscribe(function (data) { return _this.postUpdates = JSON.stringify(data); }, function (error) { return _this.errorMessage = error; });
+                };
+                BatchFileListComponent.prototype.buildOutboundJSON = function () {
+                    this.outbound.caseNumber = this.caseNumber;
+                    this.outbound.jsxid = this.batchId;
+                    this.outbound.providerId = this.providerId;
+                    this.outbound.dataFileGroupId = this.dataFileGroupId;
+                    this.outbound.userName = this.userName;
+                    this.outbound.overrideCostUpdates = this.overrideCostUpdates;
+                    //this.outbound.record = this.newVarCostUpdates;
                 };
                 BatchFileListComponent.prototype.onClickClose = function () {
                     console.log('Close App');
@@ -220,23 +248,39 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     console.log('IN  showOrFileDetail');
                 };
                 BatchFileListComponent.prototype.onRequestComplete = function () {
+                    console.log('ENTERING onRequestComplete');
                     this.loading = this._batchfileService.loading;
+                    //this.initializeData();
                     this.canEnableButtons();
-                    //this.enableButtons();
+                    console.log('LEAVING onRequestComplete');
+                };
+                BatchFileListComponent.prototype.initializeData = function () {
+                    console.log('ENTERING  intializeData');
+                    this.batchId = this.batchfileResponse.jsxid;
+                    this.providerId = this.batchfileResponse.providerId;
+                    //this.dataFileGroupId = this.batchfileResponse.dataFileGroupId;
+                    this.userName = this.batchfileResponse.userName;
+                    this.caseNumber = this.batchfileResponse.caseNumber;
+                    this.overrideCostUpdates = this.batchfileResponse.overrideCostUpdates;
+                    this.batchfiles = this.batchfileResponse.record;
+                    console.log('IN  intializeData this.batchfiles : ' + this.batchfiles);
+                    console.log('IN  intializeData this.batchfiles : ' + JSON.stringify(this.batchfiles));
+                    console.log('LEAVING  intializeData');
                 };
                 BatchFileListComponent.prototype.canEnableButtons = function () {
-                    if (this.batchfiles.length - this.updateObjects.length > 0) {
-                        document.getElementById('submitBtn').disabled = true;
+                    console.log('ENTERING   canEnableButtons');
+                    if (this.batchfiles) {
+                        if (this.batchfiles.length - this.updateObjects.length > 0) {
+                            document.getElementById('submitBtn').disabled = true;
+                        }
+                        else {
+                            document.getElementById('submitBtn').disabled = false;
+                        }
                     }
                     else {
-                        document.getElementById('submitBtn').disabled = false;
+                        console.log('IN   canEnableButtons   this.batchfiles DOES NOT YET EXIST');
                     }
-                    /* if(!this.utilityObjects || this.utilityObjects.length < 1 ){
-                            (<HTMLInputElement> document.getElementById('utilityBtn')).disabled = true;
-                        }
-                        else{
-                            (<HTMLInputElement> document.getElementById('utilityBtn')).disabled = false;
-                        }   */
+                    console.log('LEAVING   canEnableButtons');
                 };
                 BatchFileListComponent.prototype.disableButtons = function () {
                     document.getElementById('submitBtn').disabled = true;

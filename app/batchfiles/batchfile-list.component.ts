@@ -1,6 +1,7 @@
 import {IBatchFile} from './batchfile';
 import {IResponse} from './response';
 import {IUpdate} from './update';
+import {IOutbound} from './outbound';
 import {ILoadInfo} from './loadInfo';
 import {Component, OnInit, bind} from 'angular2/core';
 //import {ProviderIdFilterPipe} from './orfile-providerIdfilter.pipe';
@@ -34,25 +35,29 @@ export class BatchFileListComponent
     pageTitle: string = 'Implant Cost Ratio';
     errorMessage: string;
     httpStatus: string;
-    beginDate: string;
-    endDate: string;
-    currentORFileGroupId: string;
+    batchId: string;
+    providerId: string;
+    dataFileGroupId: string;
+    userName: string;
+    caseNumber: string;
+    overrideCostUpdates: string;
     
-    updateList: any[] = [];
-    //utilityList: any[] = [];
     postUpdates: string;
-    postRetries: string;
+    updateList: any[] = [];
     
     newVarCostUpdates: IUpdate[] = [];
     updateObjects: IUpdate[] = [];
     update: IUpdate;
 
-    response: IResponse;
+    outbound: IOutbound;
+
+    batchfileResponse: IResponse;
     batchfiles: IBatchFile[];
 
     confirmResponse:string = '';
     loading: boolean = false;
     override: boolean = false;
+    attempt: boolean = false;
 
 constructor(private _batchfileService: BatchFileService, private _confirmService:ConfirmService, private windowService: WindowService){
     this.loading = this._batchfileService.loading;
@@ -66,22 +71,44 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
      componentHandler.upgradeDom();
 
     console.log('Retrieving Batch Files...');
-    this.loading=true;
-/*  ORIGINAL - for use without top level DATA in json response
+    this.loading=false;
+    this.attempt=false;
+
+/*  NO LONGER FETCHING DATA ON LOAD - WAITING FOR USER TO ENTER DFGID
 
      this._batchfileService.getBatchFiles()
                 .subscribe(
                     batchfiles => this.batchfiles = batchfiles,
                     error => this.errorMessage = <any>error,
                     () => this.onRequestComplete());
+
 */
 
+/*  FOR USE WITH TOP LEVEL, BUT IGNORES TOP LEVEL
  this._batchfileService.getBatchFiles()
                 .subscribe(
                     response => this.batchfiles = response.record,
                     error => this.errorMessage = <any>error,
                     () => this.onRequestComplete());
-    }
+*/
+
+/*  THIS DEALS WITH ALL DATA FROM TOP LEVEL
+this._batchfileService.getBatchFiles()
+                .subscribe(
+                    response => this.batchfileResponse = response,
+                    error => this.errorMessage = <any>error,
+                    () => this.onRequestComplete());
+
+    
+*/
+}
+
+
+onUpdateDataFileGroupId(updateDFG): void{
+console.log('Entering onUpdateDataFileGroupId this.loading: ' + updateDFG);
+this.dataFileGroupId = updateDFG;
+}
+
 /*
  showConfirmDialog(stringTitle) {
      console.log('IN showConfirmDialog  action: ' + stringTitle);
@@ -120,22 +147,23 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
 */
 
     onClickrefreshBatchList(): void{
+        this.attempt= false;
         this.disableButtons();
-        //var run:boolean = this.validateReceivedDates(this.beginDate, this.endDate);
-        //if (run == true){
+        
+        if (this.dataFileGroupId && this.dataFileGroupId != null && this.dataFileGroupId!=""){
             this.batchfiles = [];
             this.loading = true;
+
           this._batchfileService.getBatchFiles()
                 .subscribe(
                     batchfiles => this.batchfiles = batchfiles,
                     error => this.errorMessage = <any>error,
-                    //() => (this.loading = this._orfileService.loading));
-                    () => (this.onRequestComplete()));
-       // }
-       // else{
-        //    alert('You entered a begin date ('+this.beginDate+') that is after the end date ('+this.endDate+ ') and that makes no sense.');
-        //    console.log('You fucked up the dates');
-       // }
+                    () => this.onRequestComplete());
+       }
+       else{
+            alert('Please Enter a DataFileGroupId to in order to fetch files');
+            console.log('You fucked up the dates');
+        }
 
     console.log('Leaving onClickrefreshBatchList this.loading: ' + this.loading);
     }
@@ -238,6 +266,8 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
 
         this.newVarCostUpdates = this.updateObjects.filter(update => update.newVarCost != null);
 
+        this.buildOutboundJSON();
+
         console.log('stringify updateObjects: ' + JSON.stringify(this.newVarCostUpdates));
         
         this._batchfileService.postUpdates(this.newVarCostUpdates)
@@ -246,6 +276,17 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
                     error => this.errorMessage = <any>error);
     }
 
+
+    buildOutboundJSON(): void{
+
+        this.outbound.caseNumber = this.caseNumber;
+        this.outbound.jsxid = this.batchId;
+        this.outbound.providerId = this.providerId;
+        this.outbound.dataFileGroupId = this.dataFileGroupId;
+        this.outbound.userName = this.userName;
+        this.outbound.overrideCostUpdates = this.overrideCostUpdates;
+        //this.outbound.record = this.newVarCostUpdates;
+    }
 
     onClickClose(): void{
         console.log('Close App');
@@ -270,13 +311,37 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
     }
 
     onRequestComplete(){
+        console.log('ENTERING onRequestComplete');
     this.loading = this._batchfileService.loading;
+    
+    //this.initializeData();
     this.canEnableButtons();
-    //this.enableButtons();
+       console.log('LEAVING onRequestComplete');
+     }
+
+    initializeData(){
+        console.log('ENTERING  intializeData');
+
+         
+    this.batchId = this.batchfileResponse.jsxid;
+    this.providerId = this.batchfileResponse.providerId;
+    //this.dataFileGroupId = this.batchfileResponse.dataFileGroupId;
+    this.userName = this.batchfileResponse.userName;
+    this.caseNumber = this.batchfileResponse.caseNumber;
+    this.overrideCostUpdates = this.batchfileResponse.overrideCostUpdates;
+    this.batchfiles = this.batchfileResponse.record;
+
+        console.log('IN  intializeData this.batchfiles : '  + this.batchfiles);
+        console.log('IN  intializeData this.batchfiles : '  + JSON.stringify(this.batchfiles));
+
+        console.log('LEAVING  intializeData');
+
     }
 
     canEnableButtons(){
-    if(this.batchfiles.length - this.updateObjects.length > 0 ){
+        console.log('ENTERING   canEnableButtons');
+    if(this.batchfiles){    
+        if(this.batchfiles.length - this.updateObjects.length > 0 ){
             (<HTMLInputElement> document.getElementById('submitBtn')).disabled = true;
         }
         else{
@@ -288,6 +353,12 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         else{
             (<HTMLInputElement> document.getElementById('utilityBtn')).disabled = false;
         }   */ 
+    }
+    else{
+        console.log('IN   canEnableButtons   this.batchfiles DOES NOT YET EXIST');
+    }
+
+     console.log('LEAVING   canEnableButtons');
     }
 
     disableButtons(){

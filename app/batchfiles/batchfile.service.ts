@@ -9,20 +9,20 @@ import {Subject} from 'rxjs/Subject';
 @Injectable()
 export class BatchFileService{
         //private _orfileUrl = 'http://crp12vdtib03:8080/ORWorkflow/service';
-private _batchfileUrl = 'api/batchfiles/batchfiles.json'; 
+private _batchfileUrl = 'api/batchfiles/batchfiles1.json'; 
         
         loading:boolean; 
 
         constructor(private _http: Http){ this.loading=false; }
     
-        _getBatchFilesOrig(): Observable<IBatchFile[]>{
+        getBatchFiles(): Observable<IBatchFile[]>{
                      return this._http.get(this._batchfileUrl)
                     .map((response: Response) => <IBatchFile[]>response.json())
                     .do(data => console.log("All: " + JSON.stringify(data)))
                     .catch(this.throwStatus);
                     }
 
-        getBatchFiles(): Observable<IResponse>{
+        _getBatchFiles_TOPLEVEL(): Observable<IResponse>{
                      return this._http.get(this._batchfileUrl)
                       .finally( () => this.loading = false)
                     .map((response: Response) => <IResponse>response.json())
@@ -47,7 +47,7 @@ private _batchfileUrl = 'api/batchfiles/batchfiles.json';
                 let headers = new Headers({ 'Content-Type': 'application/json' });
                 let options = new RequestOptions({ headers: headers });
 
-                return this._http.post(this._batchfileUrl + "/newVarCostlist", body, options)
+                return this._http.post(this._batchfileUrl + "/dataFileGroupId", body, options)
                     .do(data => console.log("POST Response: " + JSON.stringify(data)))
                     .map(this.checkResponseStatus)
                     .catch(this.throwStatus);
