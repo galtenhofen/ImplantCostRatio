@@ -5,3 +5,9 @@ li {
 div.panel-heading {
    font-size: x-large; 
 }
+
+h1{
+    color: #337AB7;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}

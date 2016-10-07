@@ -48,7 +48,6 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     this.confirmResponse = '';
                     this.loading = false;
                     this.override = false;
-                    this.attempt = false;
                     this.loading = this._batchfileService.loading;
                 }
                 BatchFileListComponent.prototype.ngOnInit = function () {
@@ -123,28 +122,32 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                             else{console.log('Requested cancelled by user');}
                    }
                 */
+                BatchFileListComponent.prototype.generateURL = function (batchId) {
+                    console.log('Entering generateURL     batchId: ' + batchId);
+                    //window.open("https://www.google.com/");
+                    window.open("http://devanalytics.medassets.com/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:" + this.dataFileGroupId + ",D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:" + batchId);
+                };
                 BatchFileListComponent.prototype.onClickrefreshBatchList = function () {
                     var _this = this;
-                    this.attempt = false;
+                    this.attempt = true;
                     this.disableButtons();
                     if (this.dataFileGroupId && this.dataFileGroupId != null && this.dataFileGroupId != "") {
                         this.batchfiles = [];
                         this.loading = true;
-                        this._batchfileService.getBatchFiles()
+                        this._batchfileService.getBatchFiles(this.dataFileGroupId)
                             .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, function (error) { return _this.errorMessage = error; }, function () { return _this.onRequestComplete(); });
                     }
                     else {
                         alert('Please Enter a DataFileGroupId to in order to fetch files');
-                        console.log('You fucked up the dates');
                     }
                     console.log('Leaving onClickrefreshBatchList this.loading: ' + this.loading);
                 };
-                BatchFileListComponent.prototype.onToggleUpdate = function (jsxid, updated) {
-                    console.log('Update button clicked.  BatchId: ' + jsxid + '  Current value = ' + updated);
-                    this.update = { "batchId": jsxid, "newVarCost": null, "updated": updated };
-                    //if the jsxid id exists, remove current value first
+                BatchFileListComponent.prototype.onToggleUpdate = function (encounterGroupType, updated) {
+                    console.log('Update button clicked.  BatchId: ' + encounterGroupType + '  Current value = ' + updated);
+                    this.update = { "batchId": encounterGroupType, "newVarCost": null, "updated": updated };
+                    //if the encounterGroupType id exists, remove current value first
                     for (var i = 0; i < this.updateObjects.length; i++) {
-                        if (this.updateObjects[i].batchId == jsxid) {
+                        if (this.updateObjects[i].batchId == encounterGroupType) {
                             this.updateObjects.splice(i, 1);
                             break;
                         }
@@ -165,7 +168,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                             else{
                     
                                 for(var i = 0; i <  this.updateObjects.length; i++) {
-                                    if( this.updateObjects[i].batchId == jsxid) {
+                                    if( this.updateObjects[i].batchId == encounterGroupType) {
                                          this.updateObjects.splice(i, 1);
                                         break;
                                         }
@@ -175,14 +178,14 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                             }*/
                     this.canEnableButtons();
                 };
-                BatchFileListComponent.prototype.onUpdateVarCost = function (jsxid, varCost) {
-                    console.log('VarCost Updated.  BatchId: ' + jsxid + '  Current value = ' + varCost);
+                BatchFileListComponent.prototype.onUpdateVarCost = function (encounterGroupType, varCost) {
+                    console.log('VarCost Updated.  BatchId: ' + encounterGroupType + '  Current value = ' + varCost);
                     if (varCost != null && varCost != "" && varCost >= 1) {
-                        this.update = { "batchId": jsxid, "newVarCost": varCost, updated: false };
+                        this.update = { "batchId": encounterGroupType, "newVarCost": varCost, updated: false };
                         //if this batchid is already in the updated array, need to delete it before adding new value
                         if (varCost != "" && varCost != null) {
                             for (var i = 0; i < this.updateObjects.length; i++) {
-                                if (this.updateObjects[i].batchId == jsxid) {
+                                if (this.updateObjects[i].batchId == encounterGroupType) {
                                     this.updateObjects.splice(i, 1);
                                     break;
                                 }
@@ -193,7 +196,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                         }
                         else {
                             for (var i = 0; i < this.updateObjects.length; i++) {
-                                if (this.updateObjects[i].batchId == jsxid) {
+                                if (this.updateObjects[i].batchId == encounterGroupType) {
                                     this.updateObjects.splice(i, 1);
                                     break;
                                 }
@@ -202,13 +205,19 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                         }
                         console.log('updateObjects length: ' + this.updateObjects.length);
                         console.log('batchFiles length: ' + this.batchfiles.length);
-                        this.canEnableButtons();
                     }
                     else {
                         alert("Value must be a number greater or equal to one.");
-                        var targetCell = "updateVarCost" + jsxid;
+                        var targetCell = "updateVarCost" + encounterGroupType;
                         document.getElementById(targetCell).value = "";
+                        for (var i = 0; i < this.updateObjects.length; i++) {
+                            if (this.updateObjects[i].batchId == encounterGroupType) {
+                                this.updateObjects.splice(i, 1);
+                                break;
+                            }
+                        }
                     }
+                    this.canEnableButtons();
                 };
                 BatchFileListComponent.prototype.onClickSubmit = function () {
                     var _this = this;
@@ -222,11 +231,11 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                         .subscribe(function (data) { return _this.postUpdates = JSON.stringify(data); }, function (error) { return _this.errorMessage = error; });
                 };
                 BatchFileListComponent.prototype.buildOutboundJSON = function () {
-                    this.outbound.caseNumber = this.caseNumber;
-                    this.outbound.jsxid = this.batchId;
-                    this.outbound.providerId = this.providerId;
+                    //this.outbound.caseNumber = this.caseNumber;
+                    this.outbound.encounterGroupType = this.batchId;
+                    //this.outbound.providerId = this.providerId;
                     this.outbound.dataFileGroupId = this.dataFileGroupId;
-                    this.outbound.userName = this.userName;
+                    //this.outbound.userName = this.userName;
                     this.outbound.overrideCostUpdates = this.overrideCostUpdates;
                     //this.outbound.record = this.newVarCostUpdates;
                 };
@@ -256,7 +265,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                 };
                 BatchFileListComponent.prototype.initializeData = function () {
                     console.log('ENTERING  intializeData');
-                    this.batchId = this.batchfileResponse.jsxid;
+                    this.batchId = this.batchfileResponse.encounterGroupType;
                     this.providerId = this.batchfileResponse.providerId;
                     //this.dataFileGroupId = this.batchfileResponse.dataFileGroupId;
                     this.userName = this.batchfileResponse.userName;

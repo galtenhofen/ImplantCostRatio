@@ -57,7 +57,7 @@ export class BatchFileListComponent
     confirmResponse:string = '';
     loading: boolean = false;
     override: boolean = false;
-    attempt: boolean = false;
+    attempt: boolean;
 
 constructor(private _batchfileService: BatchFileService, private _confirmService:ConfirmService, private windowService: WindowService){
     this.loading = this._batchfileService.loading;
@@ -67,7 +67,6 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
 
     ngOnInit(): any{
     console.log('IN  OnInit');
-     
      componentHandler.upgradeDom();
 
     console.log('Retrieving Batch Files...');
@@ -146,15 +145,23 @@ this.dataFileGroupId = updateDFG;
    }
 */
 
+    generateURL(batchId): void{
+    console.log('Entering generateURL     batchId: ' + batchId);
+
+//window.open("https://www.google.com/");
+window.open("http://devanalytics.medassets.com/MicroStrategy/servlet/mstrWeb?Server=scs41vdmapapp01&Project=Navigator&Port=0&evt=2048001&src=mstrWeb.2048001&currentViewMedia=2&uid=navigatoruser&pwd=tibco123&visMode=0&documentID=8D2FB75441655878AC5265BA30F472F0&hiddensections=header,path,dockLeft,footer&elementsPromptAnswers=463DAA084A1B77DDD437D98C59F55BED;463DAA084A1B77DDD437D98C59F55BED:" + this.dataFileGroupId + ",D15CB49A4413A7C904706C92DFEE7641;D15CB49A4413A7C904706C92DFEE7641:" + batchId);
+
+}
+
     onClickrefreshBatchList(): void{
-        this.attempt= false;
+        this.attempt= true;
         this.disableButtons();
         
         if (this.dataFileGroupId && this.dataFileGroupId != null && this.dataFileGroupId!=""){
             this.batchfiles = [];
             this.loading = true;
 
-          this._batchfileService.getBatchFiles()
+          this._batchfileService.getBatchFiles(this.dataFileGroupId)
                 .subscribe(
                     batchfiles => this.batchfiles = batchfiles,
                     error => this.errorMessage = <any>error,
@@ -162,22 +169,22 @@ this.dataFileGroupId = updateDFG;
        }
        else{
             alert('Please Enter a DataFileGroupId to in order to fetch files');
-            console.log('You fucked up the dates');
+           
         }
 
     console.log('Leaving onClickrefreshBatchList this.loading: ' + this.loading);
     }
 
-     onToggleUpdate(jsxid, updated): void{
-        console.log('Update button clicked.  BatchId: ' + jsxid + '  Current value = ' + updated);
+     onToggleUpdate(encounterGroupType, updated): void{
+        console.log('Update button clicked.  BatchId: ' + encounterGroupType + '  Current value = ' + updated);
         
-       this.update = {"batchId": jsxid, "newVarCost": null, "updated": updated  };
+       this.update = {"batchId": encounterGroupType, "newVarCost": null, "updated": updated  };
 
-//if the jsxid id exists, remove current value first
+//if the encounterGroupType id exists, remove current value first
 
 
 for(var i = 0; i <  this.updateObjects.length; i++) {
-                if( this.updateObjects[i].batchId == jsxid) {
+                if( this.updateObjects[i].batchId == encounterGroupType) {
                      this.updateObjects.splice(i, 1);
                     break;
                     }
@@ -203,7 +210,7 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         else{
 
             for(var i = 0; i <  this.updateObjects.length; i++) {
-                if( this.updateObjects[i].batchId == jsxid) {
+                if( this.updateObjects[i].batchId == encounterGroupType) {
                      this.updateObjects.splice(i, 1);
                     break;
                     }
@@ -215,16 +222,16 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         this.canEnableButtons();    
     }
 
-    onUpdateVarCost(jsxid, varCost): void{
-        console.log('VarCost Updated.  BatchId: ' + jsxid + '  Current value = ' + varCost);
+    onUpdateVarCost(encounterGroupType, varCost): void{
+        console.log('VarCost Updated.  BatchId: ' + encounterGroupType + '  Current value = ' + varCost);
      if (varCost != null && varCost != "" && varCost>=1){
-       this.update = {"batchId": jsxid, "newVarCost": varCost, updated: false  };
+       this.update = {"batchId": encounterGroupType, "newVarCost": varCost, updated: false  };
 
 //if this batchid is already in the updated array, need to delete it before adding new value
         if(varCost != "" && varCost != null){
             
             for(var i = 0; i <  this.updateObjects.length; i++) {
-                if( this.updateObjects[i].batchId == jsxid) {
+                if( this.updateObjects[i].batchId == encounterGroupType) {
                      this.updateObjects.splice(i, 1);
                     break;
                     }
@@ -238,7 +245,7 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         else{
 
             for(var i = 0; i <  this.updateObjects.length; i++) {
-                if( this.updateObjects[i].batchId == jsxid) {
+                if( this.updateObjects[i].batchId == encounterGroupType) {
                      this.updateObjects.splice(i, 1);
                     break;
                     }
@@ -248,14 +255,23 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         }
         console.log('updateObjects length: ' + this.updateObjects.length);
         console.log('batchFiles length: ' + this.batchfiles.length);
-        this.canEnableButtons();    
+          
         }
         else{
             alert("Value must be a number greater or equal to one.");
-            var targetCell = "updateVarCost"+jsxid;
+            var targetCell = "updateVarCost"+encounterGroupType;
             (<HTMLInputElement> document.getElementById(targetCell)).value = "";
+
+             for(var i = 0; i <  this.updateObjects.length; i++) {
+                if( this.updateObjects[i].batchId == encounterGroupType) {
+                     this.updateObjects.splice(i, 1);
+                    break;
+                    }
+            }
            
         }
+
+         this.canEnableButtons(); 
     }
 
 
@@ -279,11 +295,11 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
 
     buildOutboundJSON(): void{
 
-        this.outbound.caseNumber = this.caseNumber;
-        this.outbound.jsxid = this.batchId;
-        this.outbound.providerId = this.providerId;
+        //this.outbound.caseNumber = this.caseNumber;
+        this.outbound.encounterGroupType = this.batchId;
+        //this.outbound.providerId = this.providerId;
         this.outbound.dataFileGroupId = this.dataFileGroupId;
-        this.outbound.userName = this.userName;
+        //this.outbound.userName = this.userName;
         this.outbound.overrideCostUpdates = this.overrideCostUpdates;
         //this.outbound.record = this.newVarCostUpdates;
     }
@@ -323,7 +339,7 @@ for(var i = 0; i <  this.updateObjects.length; i++) {
         console.log('ENTERING  intializeData');
 
          
-    this.batchId = this.batchfileResponse.jsxid;
+    this.batchId = this.batchfileResponse.encounterGroupType;
     this.providerId = this.batchfileResponse.providerId;
     //this.dataFileGroupId = this.batchfileResponse.dataFileGroupId;
     this.userName = this.batchfileResponse.userName;

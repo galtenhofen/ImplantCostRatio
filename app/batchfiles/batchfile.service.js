@@ -27,12 +27,11 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
             BatchFileService = (function () {
                 function BatchFileService(_http) {
                     this._http = _http;
-                    //private _orfileUrl = 'http://crp12vdtib03:8080/ORWorkflow/service';
-                    this._batchfileUrl = 'api/batchfiles/batchfiles1.json';
+                    this._batchfileUrl = 'http://crp12vdtib03:8080/ICR/service/implantcostdata';
                     this.loading = false;
                 }
-                BatchFileService.prototype.getBatchFiles = function () {
-                    return this._http.get(this._batchfileUrl)
+                BatchFileService.prototype.getBatchFiles = function (dfgid) {
+                    return this._http.get(this._batchfileUrl + '/' + dfgid)
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All: " + JSON.stringify(data)); })
                         .catch(this.throwStatus);

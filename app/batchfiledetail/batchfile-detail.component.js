@@ -26,7 +26,7 @@ System.register(['angular2/core', 'angular2/router'], function(exports_1, contex
                     this._routeParams = _routeParams;
                     this._router = _router;
                     this.pageTitle = 'Batch File Detail';
-                    var id = this._routeParams.get('jsxid');
+                    var id = this._routeParams.get('encounterGroupType');
                     this.pageTitle += ": " + id;
                 }
                 BatchFileDetailComponent.prototype.onBack = function () {

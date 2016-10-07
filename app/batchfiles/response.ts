@@ -1,7 +1,7 @@
 import {IBatchFile} from './batchfile';
 
 export interface IResponse {
-   jsxid: string
+   encounterGroupType: string
    providerId: string
    dataFileGroupId: string
    userName: string

@@ -1,8 +1,8 @@
 export interface IBatchFile {
         batchID: string,
         avgImpCharge: number,
-        avgImpVarCost: number,
+        avgVarCost: number,
         volume: number,
-        description: string,
-        mstrUtl: string
+        description: string
+       // mstrUtl: string
 }

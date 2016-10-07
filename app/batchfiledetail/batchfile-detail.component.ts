@@ -9,7 +9,7 @@ export class BatchFileDetailComponent  {
     
     constructor(private _routeParams: RouteParams,
                 private _router: Router) {
-          let id = this._routeParams.get('jsxid');
+          let id = this._routeParams.get('encounterGroupType');
           this.pageTitle += `: ${id}`;
     }
 

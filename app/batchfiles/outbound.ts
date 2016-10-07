@@ -1,7 +1,7 @@
 import {ICostUpdate} from './costupdate';
 
 export interface IOutbound {
-   jsxid: string
+   encounterGroupType: string
    providerId: string
    dataFileGroupId: string
    userName: string

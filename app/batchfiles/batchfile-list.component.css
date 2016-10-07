@@ -3,9 +3,21 @@ thead{
       width: 100%;
       vertical-align: middle;
 }
+/*
+body{
+    background-color: transparent;
+}
+.panel-body{
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#428bca+63,7db9e8+100&1+73,0+100,0+100 */
+/*background: -moz-linear-gradient(top,  rgba(66,139,202,1) 63%, rgba(82,151,210,1) 73%, rgba(125,185,232,0) 100%); /* FF3.6-15 */
+/*background: -webkit-linear-gradient(top,  rgba(66,139,202,1) 63%,rgba(82,151,210,1) 73%,rgba(125,185,232,0) 100%); /* Chrome10-25,Safari5.1-6 */
+/*background: linear-gradient(to bottom,  rgba(66,139,202,1) 63%,rgba(82,151,210,1) 73%,rgba(125,185,232,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#428bca', endColorstr='#007db9e8',GradientType=0 ); /* IE6-9 */
+
+/*}*/
 
 table{
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     width:  100%;
     border-collapse: collapse;
     white-space: nowrap;
@@ -34,10 +46,14 @@ input {
 
 .radio-toolbar label {
     display:inline-block;
-    background-color:#337AB7;
+   background-color:#337AB7;
     padding:4px 11px;
     font-family:Arial;
     font-size:16px;
+}
+
+#fillerRow{
+    height: 20px;
 }
 
 #getBtn{
@@ -58,6 +74,8 @@ input {
 
 .scrollingTable {
             display: inline-block;
-            overflow-y: scroll;
-            max-height:600px;
+            overflow-y: auto;
+            max-height:500px;
+            min-height:500px;
+
         }

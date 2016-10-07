@@ -8,15 +8,16 @@ import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class BatchFileService{
-        //private _orfileUrl = 'http://crp12vdtib03:8080/ORWorkflow/service';
-private _batchfileUrl = 'api/batchfiles/batchfiles1.json'; 
+        private _batchfileUrl = 'http://crp12vdtib03:8080/ICR/service/implantcostdata'; 
+                               
+//private _batchfileUrl = 'api/batchfiles/batchfiles1.json'; 
         
         loading:boolean; 
 
         constructor(private _http: Http){ this.loading=false; }
     
-        getBatchFiles(): Observable<IBatchFile[]>{
-                     return this._http.get(this._batchfileUrl)
+        getBatchFiles(dfgid): Observable<IBatchFile[]>{
+                     return this._http.get(this._batchfileUrl+'/'+dfgid)
                     .map((response: Response) => <IBatchFile[]>response.json())
                     .do(data => console.log("All: " + JSON.stringify(data)))
                     .catch(this.throwStatus);
