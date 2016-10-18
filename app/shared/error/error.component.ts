@@ -1,19 +1,19 @@
 import {OnInit, Component} from 'angular2/core';
 
-import {ConfirmService} from "./confirm.service";
+import {ErrorService} from "./error.service";
 
 const KEY_ESC = 27;
 
 @Component({
-    selector: 'modal-confirm',
-    templateUrl: 'app/shared/confirm/confirm.component.html',
-    styleUrls: ['app/shared/confirm/confirm.component.css']
+    selector: 'modal-error',
+    templateUrl: 'app/shared/error/error.component.html',
+    styleUrls: ['app/shared/error/error.component.css']
 })
-export class ConfirmComponent implements OnInit {
+export class ErrorComponent implements OnInit {
 
     private _defaults = {
-        title: 'Confirmation',
-        message: 'Are you sure you want to submit Cost Updates?',
+        title: 'Error',
+        message: 'This is an error of the web service variety',
         cancelText: 'Cancel',
         okText: 'OK'
     };
@@ -22,16 +22,15 @@ export class ConfirmComponent implements OnInit {
     okText:string;
     cancelText:string;
 
-    private _confirmElement:any;
+    private _errorElement:any;
     private _cancelButton:any;
     private _okButton:any;
 
-    constructor(confirmService:ConfirmService) {
-        confirmService.activate = this.activate.bind(this);
+    constructor(errorService:ErrorService) {
+        errorService.activate = this.activate.bind(this);
     }
 
     _setLabels(message = this._defaults.message, title = this._defaults.title) {
-        console.log('ENTERING _setLabels');
         this.title = title;
         this.message = message;
         this.okText = this._defaults.okText;
@@ -39,7 +38,6 @@ export class ConfirmComponent implements OnInit {
     }
 
     activate(message = this._defaults.message, title = this._defaults.title) {
-        console.log('ENTERING activate');
         this._setLabels(message, title);
 
         let promise = new Promise<boolean>(resolve => {
@@ -49,28 +47,27 @@ export class ConfirmComponent implements OnInit {
     }
 
     private _show(resolve:(boolean) => any) {
-        console.log('ENTERING _show');
         document.onkeyup = null;
 
         let negativeOnClick = (e:any) => resolve(false);
         let positiveOnClick = (e:any) => resolve(true);
 
-        if (!this._confirmElement || !this._cancelButton || !this._okButton) return;
+        if (!this._errorElement || !this._cancelButton || !this._okButtonError) return;
 
-        this._confirmElement.style.opacity = 0;
-        this._confirmElement.style.zIndex = 9999;
+        this._errorElement.style.opacity = 0;
+        this._errorElement.style.zIndex = 9999;
 
-        this._cancelButton.onclick = ((e:any) => {
+        /*this._cancelButton.onclick = ((e:any) => {
             e.preventDefault();
             if (!negativeOnClick(e)) this._hideDialog();
-        })
+        })*/
 
-        this._okButton.onclick = ((e:any) => {
+        this._okButtonError.onclick = ((e:any) => {
             e.preventDefault();
             if (!positiveOnClick(e)) this._hideDialog()
         });
 
-        this._confirmElement.onclick = () => {
+        this._errorElement.onclick = () => {
             this._hideDialog();
             return negativeOnClick(null);
         };
@@ -82,19 +79,18 @@ export class ConfirmComponent implements OnInit {
             }
         };
 
-        this._confirmElement.style.opacity = 1;
+        this._errorElement.style.opacity = 1;
     }
 
     private _hideDialog() {
         document.onkeyup = null;
-        this._confirmElement.style.opacity = 0;
-        window.setTimeout(() => this._confirmElement.style.zIndex = -1, 400);
+        this._errorElement.style.opacity = 0;
+        window.setTimeout(() => this._errorElement.style.zIndex = -1, 400);
     }
 
     ngOnInit():any {
-        console.log('ENTERING confirm.component ngOnInit');
-        this._confirmElement = document.getElementById('confirmationModal');
-        this._cancelButton = document.getElementById('cancelButtonConfirm');
-        this._okButton = document.getElementById('okButtonConfirm');
+        this._errorElement = document.getElementById('errorModal');
+        //this._cancelButton = document.getElementById('cancelButton');
+        this._okButtonWrror = document.getElementById('okButtonError');
     }
 }

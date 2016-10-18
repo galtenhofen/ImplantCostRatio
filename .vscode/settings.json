@@ -6,5 +6,6 @@
         "**/*.js": true,
         "**/*.map": true
     }, 
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "typescript.tsdk": "./node_modules/typescript/lib"
 }

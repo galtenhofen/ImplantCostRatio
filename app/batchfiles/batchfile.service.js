@@ -27,62 +27,36 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
             BatchFileService = (function () {
                 function BatchFileService(_http) {
                     this._http = _http;
-                    this._batchfileUrl = 'http://crp12vdtib03:8080/ICR/service/implantcostdata';
+                    this._batchfileUrl = 'http://crp12vdtib03:8080/ICR/service';
                     this.loading = false;
                 }
                 BatchFileService.prototype.getBatchFiles = function (dfgid) {
-                    return this._http.get(this._batchfileUrl + '/' + dfgid)
+                    return this._http.get(this._batchfileUrl + '/implantcostdata/' + dfgid)
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All: " + JSON.stringify(data)); })
                         .catch(this.throwStatus);
                 };
-                BatchFileService.prototype._getBatchFiles_TOPLEVEL = function () {
-                    var _this = this;
-                    return this._http.get(this._batchfileUrl)
-                        .finally(function () { return _this.loading = false; })
-                        .map(function (response) { return response.json(); })
-                        .catch(this.throwStatus);
-                };
-                /*
-                        getORFilesByDate(beginDate:string, endDate:string): Observable<IBatchFile[]>{
-                                     console.log("IN getORFilesByDate -   URL: " +this._orfileUrl + "/status" + "/" + beginDate + "/" + endDate);
-                                     return this._http.get(this._orfileUrl + "/status" + "/" + beginDate + "/" + endDate)
-                                    .finally( () => this.loading = false)
-                                    .map((response: Response) => <IBatchFile[]>response.json())
-                                    .do(data => console.log("IN getORFilesByDate -   By Date: " + JSON.stringify(data)))
-                                    .catch(this.throwStatus)
-                                    
-                
-                                   }
-                */
-                BatchFileService.prototype.postUpdates = function (updates) {
+                BatchFileService.prototype.postUpdates = function (dfgid, override, updates) {
                     console.log('IN postUpdates  updates: ' + updates);
                     var body = JSON.stringify(updates);
                     var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
                     var options = new http_1.RequestOptions({ headers: headers });
-                    return this._http.post(this._batchfileUrl + "/dataFileGroupId", body, options)
+                    return this._http.post(this._batchfileUrl + "/save/" + dfgid + "/" + override, body, options)
                         .do(function (data) { return console.log("POST Response: " + JSON.stringify(data)); })
                         .map(this.checkResponseStatus)
                         .catch(this.throwStatus);
                 };
-                /*
-                     postReleaseRetry(retries) {
-                             console.log('IN postReleaseRetry  retries: ' + retries);
-                             let body = JSON.stringify(retries);
-                             let headers = new Headers({ 'Content-Type': 'application/json' });
-                             let options = new RequestOptions({ headers: headers });
-             
-                             return this._http.post(this._orfileUrl + "/ordatalist", body, options)
-                                 .do(data => console.log("POST Response: " + JSON.stringify(data)))
-                                 .map(this.checkResponseStatus)
-                                 .catch(this.throwStatus);
-                                 }
-             */
                 BatchFileService.prototype.throwStatus = function (error) {
                     console.log('IN throwStatus  error.status = ' + error.status);
                     console.error(error.status);
                     return Observable_1.Observable.throw(error.status || 'Server error');
                 };
+                /*
+                        private throwStatus(){
+                           console.log('IN throwStatus  error.status = ' + error.status);
+                           //console.error(error.status);
+               
+                       }*/
                 BatchFileService.prototype.checkResponseStatus = function (res) {
                     var status;
                     // check if empty, before call json

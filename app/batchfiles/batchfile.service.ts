@@ -8,8 +8,8 @@ import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class BatchFileService{
-        private _batchfileUrl = 'http://crp12vdtib03:8080/ICR/service/implantcostdata'; 
-                               
+        private _batchfileUrl = 'http://crp12vdtib03:8080/ICR/service'; 
+                             // 'http://crp12vdtib03:8080/icr/service/1233/0'
 //private _batchfileUrl = 'api/batchfiles/batchfiles1.json'; 
         
         loading:boolean; 
@@ -17,61 +17,36 @@ export class BatchFileService{
         constructor(private _http: Http){ this.loading=false; }
     
         getBatchFiles(dfgid): Observable<IBatchFile[]>{
-                     return this._http.get(this._batchfileUrl+'/'+dfgid)
+                     return this._http.get(this._batchfileUrl+'/implantcostdata/'+dfgid)
                     .map((response: Response) => <IBatchFile[]>response.json())
                     .do(data => console.log("All: " + JSON.stringify(data)))
                     .catch(this.throwStatus);
                     }
 
-        _getBatchFiles_TOPLEVEL(): Observable<IResponse>{
-                     return this._http.get(this._batchfileUrl)
-                      .finally( () => this.loading = false)
-                    .map((response: Response) => <IResponse>response.json())
-                    //.do(data => console.log("All: " + JSON.stringify(data)))
-                    .catch(this.throwStatus);
-                    }            
-/*
-        getORFilesByDate(beginDate:string, endDate:string): Observable<IBatchFile[]>{ 
-                     console.log("IN getORFilesByDate -   URL: " +this._orfileUrl + "/status" + "/" + beginDate + "/" + endDate);
-                     return this._http.get(this._orfileUrl + "/status" + "/" + beginDate + "/" + endDate) 
-                    .finally( () => this.loading = false)
-                    .map((response: Response) => <IBatchFile[]>response.json())
-                    .do(data => console.log("IN getORFilesByDate -   By Date: " + JSON.stringify(data)))
-                    .catch(this.throwStatus)
-                    
-
-                   }
-*/
-        postUpdates(updates) {
+        postUpdates(dfgid, override, updates) {
                 console.log('IN postUpdates  updates: ' + updates);
                 let body = JSON.stringify(updates);
                 let headers = new Headers({ 'Content-Type': 'application/json' });
                 let options = new RequestOptions({ headers: headers });
 
-                return this._http.post(this._batchfileUrl + "/dataFileGroupId", body, options)
+                return this._http.post(this._batchfileUrl + "/save/" + dfgid + "/" + override, body, options)
                     .do(data => console.log("POST Response: " + JSON.stringify(data)))
                     .map(this.checkResponseStatus)
                     .catch(this.throwStatus);
                     }
-   /*    
-        postReleaseRetry(retries) {
-                console.log('IN postReleaseRetry  retries: ' + retries);
-                let body = JSON.stringify(retries);
-                let headers = new Headers({ 'Content-Type': 'application/json' });
-                let options = new RequestOptions({ headers: headers });
 
-                return this._http.post(this._orfileUrl + "/ordatalist", body, options)
-                    .do(data => console.log("POST Response: " + JSON.stringify(data)))
-                    .map(this.checkResponseStatus)
-                    .catch(this.throwStatus);
-                    }
-*/
-        private throwStatus(error: Response){
+       private throwStatus(error: Response){
             console.log('IN throwStatus  error.status = ' + error.status);
             console.error(error.status);
             return Observable.throw(error.status || 'Server error');
 
         }
+ /*
+         private throwStatus(){
+            console.log('IN throwStatus  error.status = ' + error.status);
+            //console.error(error.status);
+
+        }*/
 
         private checkResponseStatus(res: Response) {
             let status;

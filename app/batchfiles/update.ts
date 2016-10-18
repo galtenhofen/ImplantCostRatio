@@ -1,6 +1,7 @@
 export interface IUpdate {
-        batchId: number,
-        newVarCost: number,
+        encounterGroupType: number,
+        targetAvgImplantVariableCost: number,
+        avgImplantCharge: number;
         updated: boolean
      
 }

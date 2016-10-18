@@ -2,7 +2,7 @@
 .loading-container {
     position: fixed;
     overflow: hidden;
-    bottom: 20%;
+    top: 40%;
     left: 40%;
     background: rgba(0, 0, 0, 0.75);
     z-index: -1;

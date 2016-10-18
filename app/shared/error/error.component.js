@@ -1,4 +1,4 @@
-System.register(['angular2/core', "./confirm.service"], function(exports_1, context_1) {
+System.register(['angular2/core', "./error.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,69 +10,65 @@ System.register(['angular2/core', "./confirm.service"], function(exports_1, cont
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, confirm_service_1;
-    var KEY_ESC, ConfirmComponent;
+    var core_1, error_service_1;
+    var KEY_ESC, ErrorComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (confirm_service_1_1) {
-                confirm_service_1 = confirm_service_1_1;
+            function (error_service_1_1) {
+                error_service_1 = error_service_1_1;
             }],
         execute: function() {
             KEY_ESC = 27;
-            ConfirmComponent = (function () {
-                function ConfirmComponent(confirmService) {
+            ErrorComponent = (function () {
+                function ErrorComponent(errorService) {
                     this._defaults = {
-                        title: 'Confirmation',
-                        message: 'Are you sure you want to submit Cost Updates?',
+                        title: 'Error',
+                        message: 'This is an error of the web service variety',
                         cancelText: 'Cancel',
                         okText: 'OK'
                     };
-                    confirmService.activate = this.activate.bind(this);
+                    errorService.activate = this.activate.bind(this);
                 }
-                ConfirmComponent.prototype._setLabels = function (message, title) {
+                ErrorComponent.prototype._setLabels = function (message, title) {
                     if (message === void 0) { message = this._defaults.message; }
                     if (title === void 0) { title = this._defaults.title; }
-                    console.log('ENTERING _setLabels');
                     this.title = title;
                     this.message = message;
                     this.okText = this._defaults.okText;
                     this.cancelText = this._defaults.cancelText;
                 };
-                ConfirmComponent.prototype.activate = function (message, title) {
+                ErrorComponent.prototype.activate = function (message, title) {
                     var _this = this;
                     if (message === void 0) { message = this._defaults.message; }
                     if (title === void 0) { title = this._defaults.title; }
-                    console.log('ENTERING activate');
                     this._setLabels(message, title);
                     var promise = new Promise(function (resolve) {
                         _this._show(resolve);
                     });
                     return promise;
                 };
-                ConfirmComponent.prototype._show = function (resolve) {
+                ErrorComponent.prototype._show = function (resolve) {
                     var _this = this;
-                    console.log('ENTERING _show');
                     document.onkeyup = null;
                     var negativeOnClick = function (e) { return resolve(false); };
                     var positiveOnClick = function (e) { return resolve(true); };
-                    if (!this._confirmElement || !this._cancelButton || !this._okButton)
+                    if (!this._errorElement || !this._cancelButton || !this._okButtonError)
                         return;
-                    this._confirmElement.style.opacity = 0;
-                    this._confirmElement.style.zIndex = 9999;
-                    this._cancelButton.onclick = (function (e) {
+                    this._errorElement.style.opacity = 0;
+                    this._errorElement.style.zIndex = 9999;
+                    /*this._cancelButton.onclick = ((e:any) => {
                         e.preventDefault();
-                        if (!negativeOnClick(e))
-                            _this._hideDialog();
-                    });
-                    this._okButton.onclick = (function (e) {
+                        if (!negativeOnClick(e)) this._hideDialog();
+                    })*/
+                    this._okButtonError.onclick = (function (e) {
                         e.preventDefault();
                         if (!positiveOnClick(e))
                             _this._hideDialog();
                     });
-                    this._confirmElement.onclick = function () {
+                    this._errorElement.onclick = function () {
                         _this._hideDialog();
                         return negativeOnClick(null);
                     };
@@ -82,32 +78,31 @@ System.register(['angular2/core', "./confirm.service"], function(exports_1, cont
                             return negativeOnClick(null);
                         }
                     };
-                    this._confirmElement.style.opacity = 1;
+                    this._errorElement.style.opacity = 1;
                 };
-                ConfirmComponent.prototype._hideDialog = function () {
+                ErrorComponent.prototype._hideDialog = function () {
                     var _this = this;
                     document.onkeyup = null;
-                    this._confirmElement.style.opacity = 0;
-                    window.setTimeout(function () { return _this._confirmElement.style.zIndex = -1; }, 400);
+                    this._errorElement.style.opacity = 0;
+                    window.setTimeout(function () { return _this._errorElement.style.zIndex = -1; }, 400);
                 };
-                ConfirmComponent.prototype.ngOnInit = function () {
-                    console.log('ENTERING confirm.component ngOnInit');
-                    this._confirmElement = document.getElementById('confirmationModal');
-                    this._cancelButton = document.getElementById('cancelButtonConfirm');
-                    this._okButton = document.getElementById('okButtonConfirm');
+                ErrorComponent.prototype.ngOnInit = function () {
+                    this._errorElement = document.getElementById('errorModal');
+                    //this._cancelButton = document.getElementById('cancelButton');
+                    this._okButtonWrror = document.getElementById('okButtonError');
                 };
-                ConfirmComponent = __decorate([
+                ErrorComponent = __decorate([
                     core_1.Component({
-                        selector: 'modal-confirm',
-                        templateUrl: 'app/shared/confirm/confirm.component.html',
-                        styleUrls: ['app/shared/confirm/confirm.component.css']
+                        selector: 'modal-error',
+                        templateUrl: 'app/shared/error/error.component.html',
+                        styleUrls: ['app/shared/error/error.component.css']
                     }), 
-                    __metadata('design:paramtypes', [confirm_service_1.ConfirmService])
-                ], ConfirmComponent);
-                return ConfirmComponent;
+                    __metadata('design:paramtypes', [error_service_1.ErrorService])
+                ], ErrorComponent);
+                return ErrorComponent;
             }());
-            exports_1("ConfirmComponent", ConfirmComponent);
+            exports_1("ErrorComponent", ErrorComponent);
         }
     }
 });
-//# sourceMappingURL=confirm.component.js.map
+//# sourceMappingURL=error.component.js.map
