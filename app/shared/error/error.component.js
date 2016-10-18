@@ -28,7 +28,7 @@ System.register(['angular2/core', "./error.service"], function(exports_1, contex
                         title: 'Error',
                         message: 'This is an error of the web service variety',
                         cancelText: 'Cancel',
-                        okText: 'OK'
+                        okText: 'Retry'
                     };
                     errorService.activate = this.activate.bind(this);
                 }
@@ -59,10 +59,11 @@ System.register(['angular2/core', "./error.service"], function(exports_1, contex
                         return;
                     this._errorElement.style.opacity = 0;
                     this._errorElement.style.zIndex = 9999;
-                    /*this._cancelButton.onclick = ((e:any) => {
+                    this._cancelButton.onclick = (function (e) {
                         e.preventDefault();
-                        if (!negativeOnClick(e)) this._hideDialog();
-                    })*/
+                        if (!negativeOnClick(e))
+                            _this._hideDialog();
+                    });
                     this._okButtonError.onclick = (function (e) {
                         e.preventDefault();
                         if (!positiveOnClick(e))
@@ -88,8 +89,8 @@ System.register(['angular2/core', "./error.service"], function(exports_1, contex
                 };
                 ErrorComponent.prototype.ngOnInit = function () {
                     this._errorElement = document.getElementById('errorModal');
-                    //this._cancelButton = document.getElementById('cancelButton');
-                    this._okButtonWrror = document.getElementById('okButtonError');
+                    this._cancelButton = document.getElementById('cancelButton');
+                    this._okButtonError = document.getElementById('okButtonError');
                 };
                 ErrorComponent = __decorate([
                     core_1.Component({

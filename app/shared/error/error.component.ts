@@ -15,7 +15,7 @@ export class ErrorComponent implements OnInit {
         title: 'Error',
         message: 'This is an error of the web service variety',
         cancelText: 'Cancel',
-        okText: 'OK'
+        okText: 'Retry'
     };
     title:string;
     message:string;
@@ -24,7 +24,7 @@ export class ErrorComponent implements OnInit {
 
     private _errorElement:any;
     private _cancelButton:any;
-    private _okButton:any;
+    private _okButtonError:any;
 
     constructor(errorService:ErrorService) {
         errorService.activate = this.activate.bind(this);
@@ -57,10 +57,10 @@ export class ErrorComponent implements OnInit {
         this._errorElement.style.opacity = 0;
         this._errorElement.style.zIndex = 9999;
 
-        /*this._cancelButton.onclick = ((e:any) => {
+        this._cancelButton.onclick = ((e:any) => {
             e.preventDefault();
             if (!negativeOnClick(e)) this._hideDialog();
-        })*/
+        })
 
         this._okButtonError.onclick = ((e:any) => {
             e.preventDefault();
@@ -90,7 +90,7 @@ export class ErrorComponent implements OnInit {
 
     ngOnInit():any {
         this._errorElement = document.getElementById('errorModal');
-        //this._cancelButton = document.getElementById('cancelButton');
-        this._okButtonWrror = document.getElementById('okButtonError');
+        this._cancelButton = document.getElementById('cancelButton');
+        this._okButtonError = document.getElementById('okButtonError');
     }
 }

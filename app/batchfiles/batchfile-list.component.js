@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../utilities/utility-list.component', './batchfile.service', '../shared/confirm/confirm.service', '../shared/confirm/confirm.component', 'angular2/router', "../windowservice/window.service"], function(exports_1, context_1) {
+System.register(['angular2/core', '../utilities/utility-list.component', './batchfile.service', '../shared/confirm/confirm.service', '../shared/confirm/confirm.component', '../shared/error/error.service', '../shared/error/error.component', 'angular2/router', "../windowservice/window.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, utility_list_component_1, batchfile_service_1, confirm_service_1, confirm_component_1, router_1, window_service_1;
+    var core_1, utility_list_component_1, batchfile_service_1, confirm_service_1, confirm_component_1, error_service_1, error_component_1, router_1, window_service_1;
     var BatchFileListComponent;
     return {
         setters:[
@@ -29,6 +29,12 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
             function (confirm_component_1_1) {
                 confirm_component_1 = confirm_component_1_1;
             },
+            function (error_service_1_1) {
+                error_service_1 = error_service_1_1;
+            },
+            function (error_component_1_1) {
+                error_component_1 = error_component_1_1;
+            },
             function (router_1_1) {
                 router_1 = router_1_1;
             },
@@ -37,9 +43,10 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
             }],
         execute: function() {
             BatchFileListComponent = (function () {
-                function BatchFileListComponent(_batchfileService, _confirmService, windowService) {
+                function BatchFileListComponent(_batchfileService, _confirmService, _errorService, windowService) {
                     this._batchfileService = _batchfileService;
                     this._confirmService = _confirmService;
+                    this._errorService = _errorService;
                     this.windowService = windowService;
                     this.pageTitle = 'Implant Cost Ratio';
                     this.updateList = [];
@@ -48,6 +55,8 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     this.confirmResponse = '';
                     this.loading = false;
                     this.override = false;
+                    this.updating = false;
+                    this.updatingError = false;
                     this.loading = this._batchfileService.loading;
                 }
                 BatchFileListComponent.prototype.ngOnInit = function () {
@@ -56,11 +65,13 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     console.log('Retrieving Batch Files...');
                     this.loading = false;
                     this.attempt = false;
+                    this.updating = false;
                     this.overrideCostUpdates = "0";
                 };
                 BatchFileListComponent.prototype.reinitialize = function () {
                     this.loading = false;
                     this.attempt = false;
+                    this.updating = false;
                     this.canEnableButtons();
                     this.overrideCostUpdates = "0";
                     this.batchfiles = [];
@@ -83,30 +94,51 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     this._confirmService.activate(stringMessage, stringTitle)
                         .then(function (res) { return _this.completeRequest(stringTitle, res); });
                 };
-                /*
-                 showErrorDialog(errMsg) {
-                     console.log('IN showErrorDialog');
-                     var stringMessage:string;
-                     var stringTitle:string;
-                        stringMessage = errMsg;
-                        stringTitle = "Oh shit";
-                        this._errorService.activate(stringMessage, stringTitle)
-                       .then(res => this.completeRequest(stringTitle, res));
-                
-                   }*/
+                BatchFileListComponent.prototype.showErrorDialog = function (errMsg) {
+                    var _this = this;
+                    console.log('IN showErrorDialog');
+                    var stringMessage;
+                    var stringTitle;
+                    stringMessage = "Web Service Error";
+                    stringTitle = errMsg;
+                    this._errorService.activate(stringMessage, stringTitle)
+                        .then(function (res) { return _this.completeRequest(stringTitle, res); });
+                };
                 BatchFileListComponent.prototype.completeRequest = function (strTitle, boolConfirm) {
                     var _this = this;
                     console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
                     if (boolConfirm) {
+                        this.updating = true;
                         this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates, this.newVarCostUpdates)
                             .subscribe(function (data) { return _this.postUpdates = JSON.stringify(data); }, 
                         //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
-                        function (error) { return _this.errorMessage = error; }, function () { return _this.onRequestComplete("submit"); });
+                        //error => this.errorMessage = <any>error,
+                        function (error) { return _this.onRequestComplete("submit", error); }, function () { return _this.onRequestComplete("submit", 200); });
                     }
                     else {
                         console.log('Requested cancelled by user');
+                        this.reinitialize();
                     }
                 };
+                /*
+                        handleError(strTitle, boolConfirm) {
+                            console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
+                            if(boolConfirm){
+                                            this.updating = true;
+                
+                                            this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates ,this.newVarCostUpdates)
+                                            .subscribe(
+                                            data => this.postUpdates = JSON.stringify(data),
+                                            //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
+                                            //error => this.errorMessage = <any>error,
+                                            error => this.onRequestComplete(error),
+                                            () => this.onRequestComplete("submit"));
+                
+                
+                                    }
+                                    else{console.log('Requested cancelled by user');}
+                        }
+                */
                 BatchFileListComponent.prototype.generateURL = function (batchId) {
                     console.log('Entering generateURL     batchId: ' + batchId);
                     //window.open("https://www.google.com/");
@@ -116,11 +148,15 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     var _this = this;
                     this.attempt = true;
                     this.disableButtons();
+                    this.errorMessage = "";
+                    this.updating = false;
                     if (this.dataFileGroupId && this.dataFileGroupId != null && this.dataFileGroupId != "") {
                         this.batchfiles = [];
                         this.loading = true;
                         this._batchfileService.getBatchFiles(this.dataFileGroupId)
-                            .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, function (error) { return _this.errorMessage = error; }, function () { return _this.onRequestComplete("get"); });
+                            .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, 
+                        //error => this.errorMessage = <any>error,
+                        function (error) { return _this.onRequestComplete("get", error); }, function () { return _this.onRequestComplete("get", "200"); });
                     }
                     else {
                         alert('Please Enter a DataFileGroupId to in order to fetch files');
@@ -202,20 +238,35 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     console.log('Override: ' + override);
                     this.overrideCostUpdates = override;
                 };
-                BatchFileListComponent.prototype.onRequestComplete = function (action) {
-                    console.log('ENTERING onRequestComplete  Action Performed: ' + action);
+                BatchFileListComponent.prototype.onRequestComplete = function (action, result) {
+                    var _this = this;
+                    console.log('ENTERING onRequestComplete  Action Performed: ' + action + '  Result: ' + result);
                     if (action == "get") {
-                        this.loading = this._batchfileService.loading;
-                        this.canEnableButtons();
+                        if (result == "200") {
+                            this.loading = this._batchfileService.loading;
+                            this.canEnableButtons();
+                        }
+                        else {
+                            console.log("ERROR BRO");
+                            this.errorMessage = result;
+                            this.loading = false;
+                            this.showErrorDialog(result);
+                        }
                     }
                     else if (action == "submit") {
-                        console.log('ENTERING onRequestComplete  Server Response: ' + this.postUpdates);
-                        if (this.postUpdates == "200") {
+                        if (result == "200") {
+                            this.updating = false;
                             console.log("SUCCESS");
                             this.reinitialize();
                         }
                         else {
-                            console.log("ERROR BRO");
+                            //Timeout to ensure errorDialog reappears                          
+                            setTimeout(function () {
+                                console.log("ERROR BRO");
+                                _this.errorMessage = result;
+                                _this.showErrorDialog(result);
+                                _this.updating = false;
+                            }, 1000);
                         }
                     }
                     console.log('LEAVING onRequestComplete');
@@ -269,11 +320,11 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                 BatchFileListComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/batchfiles/batchfile-list.component.html',
-                        styleUrls: ['app/batchfiles/batchfile-list.component.css', 'app/shared/confirm/confirm.component.css'],
-                        directives: [utility_list_component_1.UtilityListComponent, confirm_component_1.ConfirmComponent, router_1.ROUTER_DIRECTIVES],
-                        providers: [confirm_service_1.ConfirmService, window_service_1.WindowService]
+                        styleUrls: ['app/batchfiles/batchfile-list.component.css', 'app/shared/confirm/confirm.component.css', 'app/shared/error/error.component.css'],
+                        directives: [utility_list_component_1.UtilityListComponent, confirm_component_1.ConfirmComponent, error_component_1.ErrorComponent, router_1.ROUTER_DIRECTIVES],
+                        providers: [confirm_service_1.ConfirmService, error_service_1.ErrorService, window_service_1.WindowService]
                     }), 
-                    __metadata('design:paramtypes', [batchfile_service_1.BatchFileService, confirm_service_1.ConfirmService, window_service_1.WindowService])
+                    __metadata('design:paramtypes', [batchfile_service_1.BatchFileService, confirm_service_1.ConfirmService, error_service_1.ErrorService, window_service_1.WindowService])
                 ], BatchFileListComponent);
                 return BatchFileListComponent;
             }());

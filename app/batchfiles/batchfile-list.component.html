@@ -26,12 +26,12 @@
 
 
 
-<!--<modal-error></modal-error>-->
+<modal-error></modal-error>
 <modal-confirm></modal-confirm>
 <body onload='makeTableScroll();'>
 <div class='scrollingTable'> 
              <table id='batchFilesTable' resizeable mode="resizeMode" class='table table-striped table-bordered table-condensed' >
-                <thead *ngIf= 'attempt!=false && !loading && (batchfiles && batchfiles.length > 0)' >
+                <thead *ngIf= 'attempt!=false && !loading && (batchfiles && batchfiles.length > 0) && !updating && !errorMessage' >
                     <tr>
                         <th>BatchID</th>
                         <th>Description</th>
@@ -43,8 +43,8 @@
       
                     </tr>
                 </thead>           
-                <tbody >
-                <tr *ngFor='let batchfile of batchfiles; let i = index;'>
+                <tbody *ngIf='attempt!=false && !loading && (batchfiles && batchfiles.length > 0) && !updating && !errorMessage'>
+                <tr *ngFor='let batchfile of batchfiles; let i = index;'  >
                     <td style="text-align:center">{{batchfile.encounterGroupType}}</td>
                     <td style="text-align:center" (click)="generateURL(batchfile.encounterGroupType)"><a href="" target="_blank">{{batchfile.description}}</a></td> 
                     <!-- <td style="text-align:center"><a href={{batchfile.mstrUrl}} target="_blank"> {{batchfile.description}} </a></td> -->
@@ -58,18 +58,21 @@
                 
                 </tbody>
                </table>
-                <div class= 'panel-heading' *ngIf= 'attempt==false && !loading'>
+                <div class= 'panel-heading' *ngIf= 'attempt==false && !loading && !updating'>
                       Enter a DataFileGroupId to get files.
                    </div> 
-               <div class= 'panel-heading' *ngIf= 'loading && (!batchfiles || batchfiles.length < 1)'>
+               <div class= 'panel-heading' *ngIf= 'loading && (!batchfiles || batchfiles.length < 1) && !updating'>
                       Retrieving Batches...
                    </div>   
-               <div class= 'panel-heading' *ngIf='errorMessage'>
-                      There was a problem retrieving Batches.  Error Code: {{errorMessage}}
+               <div class= 'panel-heading' *ngIf='!updating && errorMessage'>
+                      There was a problem with the web service.  <br> Try again or notify development team.   <br>Error Code: {{errorMessage}}
                    </div>  
-                <div class= 'panel-heading' *ngIf='(!batchfiles || batchfiles.length < 1) && !errorMessage && !loading && attempt!=false'>
+                <div class= 'panel-heading' *ngIf='(!batchfiles || batchfiles.length < 1) && !errorMessage && !loading && attempt!=false && !updating'>
                       There is no data for this facility
                    </div>  
+                   <div class= 'panel-heading' *ngIf= 'updating && !errorMessage && !loading'>
+                      Submitting Cost Updates, please wait...
+                   </div> 
 
 
 
