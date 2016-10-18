@@ -102,61 +102,56 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
         var stringMessage:string;
         var stringTitle:string;
             stringMessage = "Are you sure you want to submit cost updates?";
-            stringTitle = "Cost Updates"; 
+            stringTitle = "Submit Cost Updates"; 
             
             this._confirmService.activate(stringMessage, stringTitle)
         .then(res => this.completeRequest(stringTitle, res));
 
     }
 
- showErrorDialog(errMsg) {
+ showErrorDialog(action, errMsg) {
      console.log('IN showErrorDialog');
      var stringMessage:string;
      var stringTitle:string;
         stringMessage = "Web Service Error";
-        stringTitle = errMsg;     
+        stringTitle = action;     
         this._errorService.activate(stringMessage, stringTitle)
        .then(res => this.completeRequest(stringTitle, res));
 
    }
 
    completeRequest(strTitle, boolConfirm) {
+            console.log('IN completeRequest   strTitle:  ' + strTitle);
             console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
             if(boolConfirm){
+
+                    if(strTitle == "Submit Cost Updates"){
                             this.updating = true;
                             this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates ,this.newVarCostUpdates)
                             .subscribe(
                             data => this.postUpdates = JSON.stringify(data), 
-                            //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
-                            //error => this.errorMessage = <any>error,
-                            error => this.onRequestComplete("submit", error),
-                            () => this.onRequestComplete("submit", 200));
-        
+                            error => this.onRequestComplete("Submit Cost Updates", error),
+                            () => this.onRequestComplete("Submit Cost Updates", 200));
+                            }
+
+                    else if(strTitle == "Get Batches"){
+                            this.batchfiles = [];
+                            this.loading = true;
+
+                            this._batchfileService.getBatchFiles(this.dataFileGroupId)
+                            .subscribe(
+                            batchfiles => this.batchfiles = batchfiles,
+                            error => this.onRequestComplete("Get Batches", error),
+                            () => this.onRequestComplete("Get Batches", "200"));
+                            }
+
                     }
+   
                     else{
                         console.log('Requested cancelled by user');
                         this.reinitialize();
-                }
-        }
-/*
-        handleError(strTitle, boolConfirm) {
-            console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
-            if(boolConfirm){
-                            this.updating = true;
-
-                            this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates ,this.newVarCostUpdates)
-                            .subscribe(
-                            data => this.postUpdates = JSON.stringify(data), 
-                            //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
-                            //error => this.errorMessage = <any>error,
-                            error => this.onRequestComplete(error),
-                            () => this.onRequestComplete("submit"));
-
-
-                    }
-                    else{console.log('Requested cancelled by user');}
-        }
-*/
+                        }
+             }
 
     generateURL(batchId): void{
             console.log('Entering generateURL     batchId: ' + batchId);
@@ -180,8 +175,8 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
                     .subscribe(
                         batchfiles => this.batchfiles = batchfiles,
                         //error => this.errorMessage = <any>error,
-                        error => this.onRequestComplete("get", error),
-                        () => this.onRequestComplete("get", "200"));
+                        error => this.onRequestComplete("Get Batches", error),
+                        () => this.onRequestComplete("Get Batches", "200"));
                 }
                 else{
                     alert('Please Enter a DataFileGroupId to in order to fetch files');
@@ -296,21 +291,25 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
 
     onRequestComplete(action, result){
             console.log('ENTERING onRequestComplete  Action Performed: ' + action + '  Result: ' + result);
-                if(action == "get"){
+                if(action == "Get Batches"){
                     if(result == "200")
                         {
                             this.loading = this._batchfileService.loading;
                             this.canEnableButtons();
                         }
                      else{
+                          setTimeout(() => 
+                            {
                             console.log("ERROR BRO");
                             this.errorMessage = result;
                             this.loading = false;
-                            this.showErrorDialog(result);
+                            this.showErrorDialog(action, result);
+                             },
+                            1000);
                      }   
 
                     }
-                else if(action == "submit"){
+                else if(action == "Submit Cost Updates"){
                     if(result == "200")
                         {
                             this.updating = false;
@@ -323,7 +322,7 @@ constructor(private _batchfileService: BatchFileService, private _confirmService
                             {
                                 console.log("ERROR BRO");
                                 this.errorMessage = result;
-                                this.showErrorDialog(result);
+                                this.showErrorDialog(action, result);
                                 this.updating = false;
                             },
                             1000);

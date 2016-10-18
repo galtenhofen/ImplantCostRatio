@@ -64,7 +64,7 @@
                <div class= 'panel-heading' *ngIf= 'loading && (!batchfiles || batchfiles.length < 1) && !updating'>
                       Retrieving Batches...
                    </div>   
-               <div class= 'panel-heading' *ngIf='!updating && errorMessage'>
+               <div class= 'panel-heading' *ngIf='!updating && errorMessage && !loading'>
                       There was a problem with the web service.  <br> Try again or notify development team.   <br>Error Code: {{errorMessage}}
                    </div>  
                 <div class= 'panel-heading' *ngIf='(!batchfiles || batchfiles.length < 1) && !errorMessage && !loading && attempt!=false && !updating'>

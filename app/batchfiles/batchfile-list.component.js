@@ -90,55 +90,42 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                     var stringMessage;
                     var stringTitle;
                     stringMessage = "Are you sure you want to submit cost updates?";
-                    stringTitle = "Cost Updates";
+                    stringTitle = "Submit Cost Updates";
                     this._confirmService.activate(stringMessage, stringTitle)
                         .then(function (res) { return _this.completeRequest(stringTitle, res); });
                 };
-                BatchFileListComponent.prototype.showErrorDialog = function (errMsg) {
+                BatchFileListComponent.prototype.showErrorDialog = function (action, errMsg) {
                     var _this = this;
                     console.log('IN showErrorDialog');
                     var stringMessage;
                     var stringTitle;
                     stringMessage = "Web Service Error";
-                    stringTitle = errMsg;
+                    stringTitle = action;
                     this._errorService.activate(stringMessage, stringTitle)
                         .then(function (res) { return _this.completeRequest(stringTitle, res); });
                 };
                 BatchFileListComponent.prototype.completeRequest = function (strTitle, boolConfirm) {
                     var _this = this;
+                    console.log('IN completeRequest   strTitle:  ' + strTitle);
                     console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
                     if (boolConfirm) {
-                        this.updating = true;
-                        this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates, this.newVarCostUpdates)
-                            .subscribe(function (data) { return _this.postUpdates = JSON.stringify(data); }, 
-                        //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
-                        //error => this.errorMessage = <any>error,
-                        function (error) { return _this.onRequestComplete("submit", error); }, function () { return _this.onRequestComplete("submit", 200); });
+                        if (strTitle == "Submit Cost Updates") {
+                            this.updating = true;
+                            this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates, this.newVarCostUpdates)
+                                .subscribe(function (data) { return _this.postUpdates = JSON.stringify(data); }, function (error) { return _this.onRequestComplete("Submit Cost Updates", error); }, function () { return _this.onRequestComplete("Submit Cost Updates", 200); });
+                        }
+                        else if (strTitle == "Get Batches") {
+                            this.batchfiles = [];
+                            this.loading = true;
+                            this._batchfileService.getBatchFiles(this.dataFileGroupId)
+                                .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, function (error) { return _this.onRequestComplete("Get Batches", error); }, function () { return _this.onRequestComplete("Get Batches", "200"); });
+                        }
                     }
                     else {
                         console.log('Requested cancelled by user');
                         this.reinitialize();
                     }
                 };
-                /*
-                        handleError(strTitle, boolConfirm) {
-                            console.log('IN completeRequest   boolConfirm:  ' + boolConfirm);
-                            if(boolConfirm){
-                                            this.updating = true;
-                
-                                            this._batchfileService.postUpdates(this.dataFileGroupId, this.overrideCostUpdates ,this.newVarCostUpdates)
-                                            .subscribe(
-                                            data => this.postUpdates = JSON.stringify(data),
-                                            //error => this.errorMessage = this.showErrorDialog(this.errorMessage),
-                                            //error => this.errorMessage = <any>error,
-                                            error => this.onRequestComplete(error),
-                                            () => this.onRequestComplete("submit"));
-                
-                
-                                    }
-                                    else{console.log('Requested cancelled by user');}
-                        }
-                */
                 BatchFileListComponent.prototype.generateURL = function (batchId) {
                     console.log('Entering generateURL     batchId: ' + batchId);
                     //window.open("https://www.google.com/");
@@ -156,7 +143,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                         this._batchfileService.getBatchFiles(this.dataFileGroupId)
                             .subscribe(function (batchfiles) { return _this.batchfiles = batchfiles; }, 
                         //error => this.errorMessage = <any>error,
-                        function (error) { return _this.onRequestComplete("get", error); }, function () { return _this.onRequestComplete("get", "200"); });
+                        function (error) { return _this.onRequestComplete("Get Batches", error); }, function () { return _this.onRequestComplete("Get Batches", "200"); });
                     }
                     else {
                         alert('Please Enter a DataFileGroupId to in order to fetch files');
@@ -241,19 +228,21 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                 BatchFileListComponent.prototype.onRequestComplete = function (action, result) {
                     var _this = this;
                     console.log('ENTERING onRequestComplete  Action Performed: ' + action + '  Result: ' + result);
-                    if (action == "get") {
+                    if (action == "Get Batches") {
                         if (result == "200") {
                             this.loading = this._batchfileService.loading;
                             this.canEnableButtons();
                         }
                         else {
-                            console.log("ERROR BRO");
-                            this.errorMessage = result;
-                            this.loading = false;
-                            this.showErrorDialog(result);
+                            setTimeout(function () {
+                                console.log("ERROR BRO");
+                                _this.errorMessage = result;
+                                _this.loading = false;
+                                _this.showErrorDialog(action, result);
+                            }, 1000);
                         }
                     }
-                    else if (action == "submit") {
+                    else if (action == "Submit Cost Updates") {
                         if (result == "200") {
                             this.updating = false;
                             console.log("SUCCESS");
@@ -264,7 +253,7 @@ System.register(['angular2/core', '../utilities/utility-list.component', './batc
                             setTimeout(function () {
                                 console.log("ERROR BRO");
                                 _this.errorMessage = result;
-                                _this.showErrorDialog(result);
+                                _this.showErrorDialog(action, result);
                                 _this.updating = false;
                             }, 1000);
                         }
